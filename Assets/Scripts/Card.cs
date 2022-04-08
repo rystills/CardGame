@@ -10,6 +10,12 @@ public class Card : MonoBehaviour
     [SerializeField] TextMesh atkText;
     int hp;
     int atk;
+    bool dragging = false;
+    Slot inSlot;
+    Vector3 initialPos;
+    Vector3 raisedPos;
+    [SerializeField] LayerMask slotLayer;
+
     void Start()
     {
         hp = Random.Range(1, 6);
@@ -18,10 +24,41 @@ public class Card : MonoBehaviour
         hpText.text = hp.ToString();
         atkText.text = atk.ToString();
         nameText.text = name.ToString();
+        initialPos = transform.position;
+        raisedPos = transform.position + new Vector3(0,.1f,0);
     }
 
-    void Update()
+    private void OnMouseDown()
     {
-        
+        if (!inSlot)
+        {
+            dragging = true;
+            Debug.Log(dragging);
+            transform.position = raisedPos;
+        }
+    }
+
+    private void OnMouseUp()
+    {
+        if (dragging)
+        {
+            dragging = false;
+
+            RaycastHit hit;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+            if (Physics.Raycast(ray, out hit, slotLayer))
+            {
+                Transform hitTrans = hit.transform;
+                transform.position = hitTrans.position;
+                Slot hitSlot = hitTrans.GetComponent<Slot>();
+                hitSlot.containedCard = this;
+                inSlot = hitSlot;
+            }
+            else
+            {
+                transform.position = initialPos;
+            }
+        }
     }
 }
