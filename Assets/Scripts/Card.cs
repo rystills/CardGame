@@ -8,8 +8,8 @@ public class Card : MonoBehaviour
     [SerializeField] TextMesh nameText;
     [SerializeField] TextMesh hpText;
     [SerializeField] TextMesh atkText;
-    int hp;
-    int atk;
+    public int hp;
+    public int atk;
     bool dragging = false;
     Slot inSlot;
     Vector3 initialPos;
@@ -33,7 +33,6 @@ public class Card : MonoBehaviour
         if (!inSlot)
         {
             dragging = true;
-            Debug.Log(dragging);
             transform.position = raisedPos;
         }
     }
