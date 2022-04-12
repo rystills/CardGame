@@ -25,7 +25,7 @@ public class Card : MonoBehaviour
         atkText.text = atk.ToString();
         nameText.text = name.ToString();
         initialPos = transform.position;
-        raisedPos = transform.position + new Vector3(0,.1f,0);
+        raisedPos = transform.position + new Vector3(0, .1f, 0);
     }
 
     private void OnMouseDown()
@@ -51,13 +51,14 @@ public class Card : MonoBehaviour
                 Transform hitTrans = hit.transform;
                 transform.position = hitTrans.position;
                 Slot hitSlot = hitTrans.GetComponent<Slot>();
-                hitSlot.containedCard = this;
-                inSlot = hitSlot;
-            }
-            else
-            {
-                transform.position = initialPos;
+                if (hitSlot && !hitSlot.containedCard)
+                {
+                    hitSlot.containedCard = this;
+                    inSlot = hitSlot;
+                    return;
+                }
             }
         }
+        transform.position = initialPos;
     }
 }
