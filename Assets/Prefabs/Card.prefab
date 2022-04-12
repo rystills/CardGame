@@ -408,6 +408,9 @@ MonoBehaviour:
   nameText: {fileID: 5893762221359572185}
   hpText: {fileID: 7704118748040949877}
   atkText: {fileID: 281884339598397320}
+  isFriendly: 1
+  hp: 0
+  atk: 0
   slotLayer:
     serializedVersion: 2
     m_Bits: 64

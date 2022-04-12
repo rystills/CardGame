@@ -9,22 +9,38 @@ public class GameManager : MonoBehaviour
     [SerializeField] TextMesh enemyHpText;
     [SerializeField] List<Slot> playerSlots;
     [SerializeField] List<Slot> enemySlots;
+    [SerializeField] GameObject Card;
 
     int playerHp = 10;
     int enemyHp = 10;
 
     private void Start()
     {
-        playerHpText.text = "HP: " + playerHp.ToString();
+        playerHpText.text = "PLYR HP: " + playerHp.ToString();
         enemyHpText.text = "ENMY HP: " + enemyHp.ToString();
+        foreach (Slot s in enemySlots)
+        {
+            GameObject.Instantiate(Card).GetComponent<Card>().setIsFriendly(false).tryEnterSlot(s);
+        }
     }
 
-    public void initiatePlayerAttack()
+    public void initAttackPhase(bool isFriendly)
     {
-        foreach (Slot s in playerSlots.Where(s => s.containedCard))
+        foreach (Slot s in (isFriendly ? playerSlots : enemySlots).Where(s => s.containedCard))
         {
-            enemyHp -= s.containedCard.atk;
+            if (!s.opposingSlot.takeDamage(s.containedCard.atk))
+            {
+                if (isFriendly)
+                {
+                    enemyHp -= s.containedCard.atk;
+                }
+                else
+                {
+                    playerHp -= s.containedCard.atk;
+                }
+            }
         }
+        playerHpText.text = "PLYR HP: " + playerHp.ToString();
         enemyHpText.text = "ENMY HP: " + enemyHp.ToString();
     }
 }

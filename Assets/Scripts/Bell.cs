@@ -7,6 +7,7 @@ public class Bell : MonoBehaviour
     [SerializeField] GameManager gameManager;
     private void OnMouseUp()
     {
-        gameManager.initiatePlayerAttack();
+        gameManager.initAttackPhase(true);
+        gameManager.initAttackPhase(false);
     }
 }

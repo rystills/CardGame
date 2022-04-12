@@ -6,8 +6,9 @@ using System.Linq;
 public class Card : MonoBehaviour
 {
     [SerializeField] TextMesh nameText;
-    [SerializeField] TextMesh hpText;
+    public TextMesh hpText;
     [SerializeField] TextMesh atkText;
+    public bool isFriendly;
     public int hp;
     public int atk;
     bool dragging = false;
@@ -37,6 +38,24 @@ public class Card : MonoBehaviour
         }
     }
 
+    public bool tryEnterSlot(Slot slot)
+    {
+        if (slot && !slot.containedCard && isFriendly == slot.isFriendly)
+        {
+            transform.SetParent(slot.transform, true);
+            transform.localPosition = Vector3.zero;
+            slot.containedCard = this;
+            inSlot = slot;
+        }
+        return slot;
+    }
+
+    public Card setIsFriendly(bool isFriendly)
+    {
+        this.isFriendly = isFriendly;
+        return this;
+    }
+
     private void OnMouseUp()
     {
         if (dragging)
@@ -48,17 +67,10 @@ public class Card : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit, slotLayer))
             {
-                Transform hitTrans = hit.transform;
-                transform.position = hitTrans.position;
-                Slot hitSlot = hitTrans.GetComponent<Slot>();
-                if (hitSlot && !hitSlot.containedCard)
-                {
-                    hitSlot.containedCard = this;
-                    inSlot = hitSlot;
-                    return;
+                if (!tryEnterSlot(hit.transform.GetComponent<Slot>())) {
+                    transform.position = initialPos;
                 }
             }
         }
-        transform.position = initialPos;
     }
 }

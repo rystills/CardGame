@@ -5,15 +5,24 @@ using UnityEngine;
 public class Slot : MonoBehaviour
 {
     public Card containedCard;
-    // Start is called before the first frame update
-    void Start()
+    public Slot opposingSlot;
+    public bool isFriendly;
+    
+    public bool takeDamage(int dmgAmnt)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        if (containedCard)
+        {
+            if ((containedCard.hp -= dmgAmnt) <= 0)
+            {
+                DestroyImmediate(containedCard.gameObject);
+                containedCard = null;
+            }
+            else
+            {
+                containedCard.hpText.text = containedCard.hp.ToString();
+            }
+            return true;
+        }
+        return false;
     }
 }
